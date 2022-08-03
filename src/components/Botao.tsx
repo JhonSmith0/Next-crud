@@ -4,11 +4,13 @@ interface propsInt {
   cor?: "green" | "blue" | "gray";
   children?: any;
   className?: string;
+  onClick?: () => any;
 }
 
 export default function Botao(props: propsInt) {
   return (
     <button
+      onClick={props.onClick}
       className={`
   bg-gradient-to-r
   from-${props.cor || "blue"}-400

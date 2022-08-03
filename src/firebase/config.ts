@@ -1,6 +1,8 @@
 // Import the functions you need from the SDKs you need
 
 import { initializeApp } from "firebase/app";
+import { getFirestore, initializeFirestore } from "firebase/firestore";
+import ColecaoCliente from "./db/ColecaoCliente";
 
 // TODO: Add SDKs for Firebase products that you want to use
 
@@ -9,12 +11,14 @@ import { initializeApp } from "firebase/app";
 // Your web app's Firebase configuration
 
 const firebaseConfig = {
-  NEXT_FIREBASE_APIKEY: process.env.NEXT_FIREBASE_APIKEY,
-  NEXT_FIREBASE_AUTHDOMAIN: process.env.NEXT_FIREBASE_AUTHDOMAIN,
-  NEXT_FIREBASE_PROJECTID: process.env.NEXT_FIREBASE_PROJECTID,
+  apiKey: process.env.NEXT_FIREBASE_APIKEY,
+  authDomain: process.env.NEXT_FIREBASE_AUTHDOMAIN,
+  projectId: process.env.NEXT_FIREBASE_PROJECTID,
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-export default app;
+export { app };
+export { db };
