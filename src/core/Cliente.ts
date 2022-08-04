@@ -1,3 +1,5 @@
+import { nanoid } from "nanoid";
+
 export default class Cliente {
   private _id: string;
   private _nome: string;

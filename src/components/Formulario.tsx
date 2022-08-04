@@ -1,5 +1,6 @@
 // import styles from "../styles/*.module.css";
 
+import { nanoid } from "nanoid";
 import { useState } from "react";
 import Cliente from "../core/Cliente";
 import Botao from "./Botao";
@@ -38,7 +39,7 @@ export default function Formulario(props: propsInt) {
           cor="blue"
           onClick={props.onClienteMudou.bind(
             null,
-            new Cliente(nome, +idade, id)
+            new Cliente(nome, +idade, id ?? nanoid())
           )}
         >
           {id ? "Alterar" : "Salvar"}

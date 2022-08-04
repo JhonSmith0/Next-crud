@@ -4,35 +4,39 @@ import Formulario from "../components/Formulario";
 import Layout from "../components/Layout";
 import Tabela from "../components/Tabela";
 import Cliente from "../core/Cliente";
+import useClientes from "../hooks/useClientes";
+import useVisivel from "../hooks/useVisivel";
 
-const clientes = [
-  new Cliente("nom1", 1, "1"),
-  new Cliente("nom2", 2, "2"),
-  new Cliente("nom3", 3, "3"),
-  new Cliente("nom4", 4, "4"),
-];
+const clientes = [];
+
 export default function Home() {
-  const [cliente, setCliente] = useState<Cliente>(Cliente.Vazio());
-  const [visivel, setVisivel] = useState<"tabela" | "formulario">("tabela");
+  const {
+    adicionarCliente,
+    removerCliente,
+    alterarCliente,
+    clienteAtual,
+    clientes,
+    setClienteAtual,
+  } = useClientes([]);
 
-  function clienteSelecionado(cliente: Cliente) {
-    setCliente(cliente);
-    setVisivel("formulario");
+  const { tabelaVisivel, mostrarFormulario, mostrarTabela } = useVisivel();
+
+  function onSelect(cliente: Cliente) {
+    setClienteAtual(cliente);
+    mostrarFormulario();
   }
-  function clienteExcluido(cliente: Cliente) {
-    console.log("excluido", cliente);
-  }
 
-  function salvarCliente(cliente: Cliente) {
-    console.log(cliente);
+  function onClienteMudou(cliente: Cliente) {
+    cliente.id === clienteAtual.id
+      ? alterarCliente(cliente)
+      : adicionarCliente(cliente);
 
-    clientes.push(cliente);
-    setVisivel("tabela");
+    mostrarTabela();
   }
 
   function novoCliente() {
-    setCliente(Cliente.Vazio());
-    setVisivel("formulario");
+    setClienteAtual(Cliente.Vazio());
+    mostrarFormulario();
   }
 
   return (
@@ -44,7 +48,7 @@ export default function Home() {
     "
     >
       <Layout titulo="Cadastro simples">
-        {visivel === "tabela" ? (
+        {tabelaVisivel ? (
           <>
             <Botao
               onClick={novoCliente}
@@ -55,15 +59,15 @@ export default function Home() {
             </Botao>
             <Tabela
               clientes={clientes}
-              clienteSelecionado={clienteSelecionado}
-              clienteExcluido={clienteExcluido}
+              clienteSelecionado={onSelect}
+              clienteExcluido={removerCliente}
             ></Tabela>
           </>
         ) : (
           <Formulario
-            cliente={cliente}
-            onCancelar={setVisivel.bind(null, "tabela")}
-            onClienteMudou={salvarCliente}
+            cliente={clienteAtual}
+            onCancelar={mostrarTabela}
+            onClienteMudou={onClienteMudou}
           />
         )}
       </Layout>
